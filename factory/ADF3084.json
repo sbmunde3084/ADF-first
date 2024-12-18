@@ -1,0 +1,9 @@
+{
+	"name": "ADF3084",
+	"location": "northeurope",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "69da8602-77ca-40b0-b537-9c04c219bc3f",
+		"tenantId": "55a49860-46f1-4f51-853c-d954627844b8"
+	}
+}
