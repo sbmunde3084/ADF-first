@@ -19,6 +19,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'password' of 'AzureSynapseAnalytics2'"
 		},
+		"Azuresqldb_Ls_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'Azuresqldb_Ls'"
+		},
 		"AzureDataLakeStorage1_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://my2ndadlsstorage16dec.dfs.core.windows.net/"
@@ -82,6 +86,9 @@
 					},
 					"AzureSynapseAnalytics2_password": {
 						"value": "[parameters('AzureSynapseAnalytics2_password')]"
+					},
+					"Azuresqldb_Ls_connectionString": {
+						"value": "[parameters('Azuresqldb_Ls_connectionString')]"
 					},
 					"AzureDataLakeStorage1_properties_typeProperties_url": {
 						"value": "[parameters('AzureDataLakeStorage1_properties_typeProperties_url')]"
