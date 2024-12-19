@@ -1,0 +1,57 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "ADF3084"
+		},
+		"Appdb_password": {
+			"value": ""
+		},
+		"AzureDataLakeStorage1_accountKey": {
+			"value": ""
+		},
+		"AzureSqlDataasetLS_password": {
+			"value": ""
+		},
+		"AzureSynapseAnalytics2_password": {
+			"value": ""
+		},
+		"Appdb_properties_typeProperties_server": {
+			"value": "sqldb17dec.database.windows.net"
+		},
+		"Appdb_properties_typeProperties_database": {
+			"value": "sqldb17dec"
+		},
+		"Appdb_properties_typeProperties_userName": {
+			"value": "sqldb17decadmin"
+		},
+		"AzureDataLakeStorage1_properties_typeProperties_url": {
+			"value": "https://my2ndadlsstorage16dec.dfs.core.windows.net/"
+		},
+		"AzureSqlDataasetLS_properties_typeProperties_server": {
+			"value": "sqldb17dec.database.windows.net"
+		},
+		"AzureSqlDataasetLS_properties_typeProperties_database": {
+			"value": "sqldb17dec"
+		},
+		"AzureSqlDataasetLS_properties_typeProperties_userName": {
+			"value": "sqldb17decadmin"
+		},
+		"AzureSynapseAnalytics2_properties_typeProperties_server": {
+			"value": "synapse16dec.sql.azuresynapse.net"
+		},
+		"AzureSynapseAnalytics2_properties_typeProperties_database": {
+			"value": "synapse16dec"
+		},
+		"AzureSynapseAnalytics2_properties_typeProperties_userName": {
+			"value": "sqladminuser16dec"
+		},
+		"containerUri": {
+			"value": ""
+		},
+		"containerSasToken": {
+			"value": ""
+		}
+	}
+}

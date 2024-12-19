@@ -1,0 +1,140 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "ADF3084"
+		},
+		"Appdb_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'Appdb'"
+		},
+		"AzureDataLakeStorage1_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'AzureDataLakeStorage1'"
+		},
+		"AzureSqlDataasetLS_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'AzureSqlDataasetLS'"
+		},
+		"AzureSynapseAnalytics2_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'AzureSynapseAnalytics2'"
+		},
+		"Appdb_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "sqldb17dec.database.windows.net"
+		},
+		"Appdb_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "sqldb17dec"
+		},
+		"Appdb_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "sqldb17decadmin"
+		},
+		"AzureDataLakeStorage1_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://my2ndadlsstorage16dec.dfs.core.windows.net/"
+		},
+		"AzureSqlDataasetLS_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "sqldb17dec.database.windows.net"
+		},
+		"AzureSqlDataasetLS_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "sqldb17dec"
+		},
+		"AzureSqlDataasetLS_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "sqldb17decadmin"
+		},
+		"AzureSynapseAnalytics2_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "synapse16dec.sql.azuresynapse.net"
+		},
+		"AzureSynapseAnalytics2_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "synapse16dec"
+		},
+		"AzureSynapseAnalytics2_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "sqladminuser16dec"
+		},
+		"containerUri": {
+			"type": "string",
+			"metadata": "URI to storage account containing linked ARM templates"
+		},
+		"containerSasToken": {
+			"type": "string",
+			"metadata": "Sas token to storage account containing linked ARM templates"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "ADF3084_ArmTemplate_0",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2024-03-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_0.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"Appdb_password": {
+						"value": "[parameters('Appdb_password')]"
+					},
+					"AzureDataLakeStorage1_accountKey": {
+						"value": "[parameters('AzureDataLakeStorage1_accountKey')]"
+					},
+					"AzureSqlDataasetLS_password": {
+						"value": "[parameters('AzureSqlDataasetLS_password')]"
+					},
+					"AzureSynapseAnalytics2_password": {
+						"value": "[parameters('AzureSynapseAnalytics2_password')]"
+					},
+					"Appdb_properties_typeProperties_server": {
+						"value": "[parameters('Appdb_properties_typeProperties_server')]"
+					},
+					"Appdb_properties_typeProperties_database": {
+						"value": "[parameters('Appdb_properties_typeProperties_database')]"
+					},
+					"Appdb_properties_typeProperties_userName": {
+						"value": "[parameters('Appdb_properties_typeProperties_userName')]"
+					},
+					"AzureDataLakeStorage1_properties_typeProperties_url": {
+						"value": "[parameters('AzureDataLakeStorage1_properties_typeProperties_url')]"
+					},
+					"AzureSqlDataasetLS_properties_typeProperties_server": {
+						"value": "[parameters('AzureSqlDataasetLS_properties_typeProperties_server')]"
+					},
+					"AzureSqlDataasetLS_properties_typeProperties_database": {
+						"value": "[parameters('AzureSqlDataasetLS_properties_typeProperties_database')]"
+					},
+					"AzureSqlDataasetLS_properties_typeProperties_userName": {
+						"value": "[parameters('AzureSqlDataasetLS_properties_typeProperties_userName')]"
+					},
+					"AzureSynapseAnalytics2_properties_typeProperties_server": {
+						"value": "[parameters('AzureSynapseAnalytics2_properties_typeProperties_server')]"
+					},
+					"AzureSynapseAnalytics2_properties_typeProperties_database": {
+						"value": "[parameters('AzureSynapseAnalytics2_properties_typeProperties_database')]"
+					},
+					"AzureSynapseAnalytics2_properties_typeProperties_userName": {
+						"value": "[parameters('AzureSynapseAnalytics2_properties_typeProperties_userName')]"
+					}
+				}
+			},
+			"dependsOn": []
+		}
+	]
+}
