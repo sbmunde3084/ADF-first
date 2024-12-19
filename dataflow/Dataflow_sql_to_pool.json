@@ -123,11 +123,24 @@
 				"     updateable:false,",
 				"     upsertable:false,",
 				"     format: 'table',",
-				"     staged: true,",
-				"     allowCopyCommand: true,",
+				"     staged: false,",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
-				"     errorHandlingOption: 'stopOnFirstError') ~> Synapsepoolfacttable"
+				"     errorHandlingOption: 'stopOnFirstError',",
+				"     mapColumn(",
+				"          SalesOrderID,",
+				"          OrderQty,",
+				"          ProductID,",
+				"          UnitPrice,",
+				"          UnitPriceDiscount,",
+				"          LineTotal,",
+				"          OrderDate,",
+				"          CustomerID,",
+				"          SubTotal,",
+				"          TaxAmt,",
+				"          Freight,",
+				"          TotalDue",
+				"     )) ~> Synapsepoolfacttable"
 			]
 		}
 	}
