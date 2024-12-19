@@ -17,6 +17,13 @@
 						"type": "DatasetReference"
 					},
 					"name": "Salesorderdetails"
+				},
+				{
+					"dataset": {
+						"referenceName": "dimcustomer",
+						"type": "DatasetReference"
+					},
+					"name": "sourceCustomer"
 				}
 			],
 			"sinks": [
@@ -26,6 +33,13 @@
 						"type": "DatasetReference"
 					},
 					"name": "Synapsepoolfacttable"
+				},
+				{
+					"dataset": {
+						"referenceName": "AzureSynapsedimCustomer",
+						"type": "DatasetReference"
+					},
+					"name": "sinkdimCustomer"
 				}
 			],
 			"transformations": [
@@ -34,6 +48,9 @@
 				},
 				{
 					"name": "selectcoloumn"
+				},
+				{
+					"name": "selectcustomercolumn"
 				}
 			],
 			"scriptLines": [
@@ -80,6 +97,27 @@
 				"     validateSchema: false,",
 				"     isolationLevel: 'READ_UNCOMMITTED',",
 				"     format: 'table') ~> Salesorderdetails",
+				"source(output(",
+				"          CustomerID as integer,",
+				"          NameStyle as boolean,",
+				"          Title as string,",
+				"          FirstName as string,",
+				"          MiddleName as string,",
+				"          LastName as string,",
+				"          Suffix as string,",
+				"          CompanyName as string,",
+				"          SalesPerson as string,",
+				"          EmailAddress as string,",
+				"          Phone as string,",
+				"          PasswordHash as string,",
+				"          PasswordSalt as string,",
+				"          rowguid as string,",
+				"          ModifiedDate as timestamp",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> sourceCustomer",
 				"Salesorderheader, Salesorderdetails join(Salesorderheader@SalesOrderID == Salesorderdetails@SalesOrderID,",
 				"     joinType:'inner',",
 				"     matchType:'exact',",
@@ -102,6 +140,12 @@
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> selectcoloumn",
+				"sourceCustomer select(mapColumn(",
+				"          CustomerID,",
+				"          CompanyName",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> selectcustomercolumn",
 				"selectcoloumn sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
@@ -140,7 +184,23 @@
 				"          TaxAmt,",
 				"          Freight,",
 				"          TotalDue",
-				"     )) ~> Synapsepoolfacttable"
+				"     )) ~> Synapsepoolfacttable",
+				"selectcustomercolumn sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          CustomerID as integer,",
+				"          CompanyName as string",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     staged: true,",
+				"     allowCopyCommand: true,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> sinkdimCustomer"
 			]
 		}
 	}
