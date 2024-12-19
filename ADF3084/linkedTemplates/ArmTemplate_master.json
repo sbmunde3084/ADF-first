@@ -15,9 +15,9 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'password' of 'AzureSqlDataasetLS'"
 		},
-		"AzureSynapseAnalytics2_password": {
+		"AzureSynapseAnalytics2_connectionString": {
 			"type": "secureString",
-			"metadata": "Secure string for 'password' of 'AzureSynapseAnalytics2'"
+			"metadata": "Secure string for 'connectionString' of 'AzureSynapseAnalytics2'"
 		},
 		"Azuresqldb_Ls_connectionString": {
 			"type": "secureString",
@@ -38,18 +38,6 @@
 		"AzureSqlDataasetLS_properties_typeProperties_userName": {
 			"type": "string",
 			"defaultValue": "sqldb17decadmin"
-		},
-		"AzureSynapseAnalytics2_properties_typeProperties_server": {
-			"type": "string",
-			"defaultValue": "synapse16dec.sql.azuresynapse.net"
-		},
-		"AzureSynapseAnalytics2_properties_typeProperties_database": {
-			"type": "string",
-			"defaultValue": "synapse16dec"
-		},
-		"AzureSynapseAnalytics2_properties_typeProperties_userName": {
-			"type": "string",
-			"defaultValue": "sqladminuser16dec"
 		},
 		"containerUri": {
 			"type": "string",
@@ -84,8 +72,8 @@
 					"AzureSqlDataasetLS_password": {
 						"value": "[parameters('AzureSqlDataasetLS_password')]"
 					},
-					"AzureSynapseAnalytics2_password": {
-						"value": "[parameters('AzureSynapseAnalytics2_password')]"
+					"AzureSynapseAnalytics2_connectionString": {
+						"value": "[parameters('AzureSynapseAnalytics2_connectionString')]"
 					},
 					"Azuresqldb_Ls_connectionString": {
 						"value": "[parameters('Azuresqldb_Ls_connectionString')]"
@@ -101,15 +89,6 @@
 					},
 					"AzureSqlDataasetLS_properties_typeProperties_userName": {
 						"value": "[parameters('AzureSqlDataasetLS_properties_typeProperties_userName')]"
-					},
-					"AzureSynapseAnalytics2_properties_typeProperties_server": {
-						"value": "[parameters('AzureSynapseAnalytics2_properties_typeProperties_server')]"
-					},
-					"AzureSynapseAnalytics2_properties_typeProperties_database": {
-						"value": "[parameters('AzureSynapseAnalytics2_properties_typeProperties_database')]"
-					},
-					"AzureSynapseAnalytics2_properties_typeProperties_userName": {
-						"value": "[parameters('AzureSynapseAnalytics2_properties_typeProperties_userName')]"
 					}
 				}
 			},

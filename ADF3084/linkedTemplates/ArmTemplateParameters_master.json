@@ -11,7 +11,7 @@
 		"AzureSqlDataasetLS_password": {
 			"value": ""
 		},
-		"AzureSynapseAnalytics2_password": {
+		"AzureSynapseAnalytics2_connectionString": {
 			"value": ""
 		},
 		"Azuresqldb_Ls_connectionString": {
@@ -28,15 +28,6 @@
 		},
 		"AzureSqlDataasetLS_properties_typeProperties_userName": {
 			"value": "sqldb17decadmin"
-		},
-		"AzureSynapseAnalytics2_properties_typeProperties_server": {
-			"value": "synapse16dec.sql.azuresynapse.net"
-		},
-		"AzureSynapseAnalytics2_properties_typeProperties_database": {
-			"value": "synapse16dec"
-		},
-		"AzureSynapseAnalytics2_properties_typeProperties_userName": {
-			"value": "sqladminuser16dec"
 		},
 		"containerUri": {
 			"value": ""

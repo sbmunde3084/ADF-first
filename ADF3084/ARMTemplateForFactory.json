@@ -15,9 +15,9 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'password' of 'AzureSqlDataasetLS'"
 		},
-		"AzureSynapseAnalytics2_password": {
+		"AzureSynapseAnalytics2_connectionString": {
 			"type": "secureString",
-			"metadata": "Secure string for 'password' of 'AzureSynapseAnalytics2'"
+			"metadata": "Secure string for 'connectionString' of 'AzureSynapseAnalytics2'"
 		},
 		"Azuresqldb_Ls_connectionString": {
 			"type": "secureString",
@@ -38,18 +38,6 @@
 		"AzureSqlDataasetLS_properties_typeProperties_userName": {
 			"type": "string",
 			"defaultValue": "sqldb17decadmin"
-		},
-		"AzureSynapseAnalytics2_properties_typeProperties_server": {
-			"type": "string",
-			"defaultValue": "synapse16dec.sql.azuresynapse.net"
-		},
-		"AzureSynapseAnalytics2_properties_typeProperties_database": {
-			"type": "string",
-			"defaultValue": "synapse16dec"
-		},
-		"AzureSynapseAnalytics2_properties_typeProperties_userName": {
-			"type": "string",
-			"defaultValue": "sqladminuser16dec"
 		}
 	},
 	"variables": {
@@ -1292,16 +1280,7 @@
 				"annotations": [],
 				"type": "AzureSqlDW",
 				"typeProperties": {
-					"server": "[parameters('AzureSynapseAnalytics2_properties_typeProperties_server')]",
-					"database": "[parameters('AzureSynapseAnalytics2_properties_typeProperties_database')]",
-					"encrypt": "mandatory",
-					"trustServerCertificate": false,
-					"authenticationType": "SQL",
-					"userName": "[parameters('AzureSynapseAnalytics2_properties_typeProperties_userName')]",
-					"password": {
-						"type": "SecureString",
-						"value": "[parameters('AzureSynapseAnalytics2_password')]"
-					}
+					"connectionString": "[parameters('AzureSynapseAnalytics2_connectionString')]"
 				}
 			},
 			"dependsOn": []
