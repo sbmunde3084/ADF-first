@@ -5,9 +5,6 @@
 		"factoryName": {
 			"value": "ADF3084"
 		},
-		"Appdb_password": {
-			"value": ""
-		},
 		"AzureDataLakeStorage1_accountKey": {
 			"value": ""
 		},
@@ -16,15 +13,6 @@
 		},
 		"AzureSynapseAnalytics2_password": {
 			"value": ""
-		},
-		"Appdb_properties_typeProperties_server": {
-			"value": "sqldb17dec.database.windows.net"
-		},
-		"Appdb_properties_typeProperties_database": {
-			"value": "sqldb17dec"
-		},
-		"Appdb_properties_typeProperties_userName": {
-			"value": "sqldb17decadmin"
 		},
 		"AzureDataLakeStorage1_properties_typeProperties_url": {
 			"value": "https://my2ndadlsstorage16dec.dfs.core.windows.net/"
