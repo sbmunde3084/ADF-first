@@ -691,6 +691,11 @@
 				"type": "AzureSqlDWTable",
 				"schema": [
 					{
+						"name": "CustomerSK",
+						"type": "int",
+						"precision": 10
+					},
+					{
 						"name": "CustomerID",
 						"type": "int",
 						"precision": 10
@@ -1632,6 +1637,9 @@
 						},
 						{
 							"name": "surrogateKey1"
+						},
+						{
+							"name": "surrogateKeycustomer"
 						}
 					],
 					"scriptLines": [
@@ -1779,6 +1787,9 @@
 						"filtercolourNOTnullrows keyGenerate(output(ProductSK as long),",
 						"     startAt: 1L,",
 						"     stepValue: 1L) ~> surrogateKey1",
+						"selectcustomercolumn keyGenerate(output(CustomerSK as long),",
+						"     startAt: 1L,",
+						"     stepValue: 1L) ~> surrogateKeycustomer",
 						"derivedColumnTotaldue sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
 						"     input(",
@@ -1818,9 +1829,10 @@
 						"          Freight,",
 						"          TotalDue = TotalDuec",
 						"     )) ~> Synapsepoolfacttable",
-						"selectcustomercolumn sink(allowSchemaDrift: true,",
+						"surrogateKeycustomer sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
 						"     input(",
+						"          CustomerSK as integer,",
 						"          CustomerID as integer,",
 						"          CompanyName as string",
 						"     ),",
@@ -1835,7 +1847,8 @@
 						"     errorHandlingOption: 'stopOnFirstError',",
 						"     mapColumn(",
 						"          CustomerID,",
-						"          CompanyName",
+						"          CompanyName,",
+						"          CustomerSK",
 						"     )) ~> sinkdimCustomer",
 						"surrogateKey1 sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
