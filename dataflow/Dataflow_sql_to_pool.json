@@ -24,6 +24,20 @@
 						"type": "DatasetReference"
 					},
 					"name": "sourceCustomer"
+				},
+				{
+					"dataset": {
+						"referenceName": "AzureProductdataset",
+						"type": "DatasetReference"
+					},
+					"name": "sourceProduct"
+				},
+				{
+					"dataset": {
+						"referenceName": "AzureProductcategory",
+						"type": "DatasetReference"
+					},
+					"name": "sourceproductcategory"
 				}
 			],
 			"sinks": [
@@ -40,6 +54,13 @@
 						"type": "DatasetReference"
 					},
 					"name": "sinkdimCustomer"
+				},
+				{
+					"dataset": {
+						"referenceName": "AzureSynapsedimproduct",
+						"type": "DatasetReference"
+					},
+					"name": "sinkdimproduct"
 				}
 			],
 			"transformations": [
@@ -51,6 +72,15 @@
 				},
 				{
 					"name": "selectcustomercolumn"
+				},
+				{
+					"name": "joinproductandcategory"
+				},
+				{
+					"name": "selectDimproduct"
+				},
+				{
+					"name": "filtercolourNOTnullrows"
 				}
 			],
 			"scriptLines": [
@@ -118,6 +148,40 @@
 				"     validateSchema: false,",
 				"     isolationLevel: 'READ_UNCOMMITTED',",
 				"     format: 'table') ~> sourceCustomer",
+				"source(output(",
+				"          ProductID as integer,",
+				"          Name as string,",
+				"          ProductNumber as string,",
+				"          Color as string,",
+				"          StandardCost as decimal(19,4),",
+				"          ListPrice as decimal(19,4),",
+				"          Size as string,",
+				"          Weight as decimal(8,2),",
+				"          ProductCategoryID as integer,",
+				"          ProductModelID as integer,",
+				"          SellStartDate as timestamp,",
+				"          SellEndDate as timestamp,",
+				"          DiscontinuedDate as timestamp,",
+				"          ThumbNailPhoto as binary,",
+				"          ThumbnailPhotoFileName as string,",
+				"          rowguid as string,",
+				"          ModifiedDate as timestamp",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> sourceProduct",
+				"source(output(",
+				"          ProductCategoryID as integer,",
+				"          ParentProductCategoryID as integer,",
+				"          Name as string,",
+				"          rowguid as string,",
+				"          ModifiedDate as timestamp",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> sourceproductcategory",
 				"Salesorderheader, Salesorderdetails join(Salesorderheader@SalesOrderID == Salesorderdetails@SalesOrderID,",
 				"     joinType:'inner',",
 				"     matchType:'exact',",
@@ -146,6 +210,21 @@
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> selectcustomercolumn",
+				"sourceProduct, sourceproductcategory join(sourceProduct@ProductCategoryID == sourceproductcategory@ProductCategoryID,",
+				"     joinType:'inner',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> joinproductandcategory",
+				"joinproductandcategory select(mapColumn(",
+				"          ProductID,",
+				"          ProductNumber,",
+				"          Color,",
+				"          ProductCategoryID = sourceProduct@ProductCategoryID,",
+				"          ProductCategoryName = sourceproductcategory@Name",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> selectDimproduct",
+				"selectDimproduct filter(!isNull(Color)) ~> filtercolourNOTnullrows",
 				"selectcoloumn sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
@@ -199,7 +278,26 @@
 				"     staged: false,",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
-				"     errorHandlingOption: 'stopOnFirstError') ~> sinkdimCustomer"
+				"     errorHandlingOption: 'stopOnFirstError') ~> sinkdimCustomer",
+				"filtercolourNOTnullrows sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          ProductID as integer,",
+				"          ProductNumber as string,",
+				"          Color as string,",
+				"          ProductCategoryID as integer,",
+				"          ProductCategoryName as string",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     staged: true,",
+				"     allowCopyCommand: true,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> sinkdimproduct"
 			]
 		}
 	}
