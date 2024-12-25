@@ -81,6 +81,9 @@
 				},
 				{
 					"name": "filtercolourNOTnullrows"
+				},
+				{
+					"name": "derivedColumnTotaldue"
 				}
 			],
 			"scriptLines": [
@@ -199,8 +202,7 @@
 				"          CustomerID,",
 				"          SubTotal,",
 				"          TaxAmt,",
-				"          Freight,",
-				"          TotalDue",
+				"          Freight",
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> selectcoloumn",
@@ -225,7 +227,8 @@
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> selectDimproduct",
 				"selectDimproduct filter(!isNull(Color)) ~> filtercolourNOTnullrows",
-				"selectcoloumn sink(allowSchemaDrift: true,",
+				"selectcoloumn derive(TotalDuec = add(Freight,add(SubTotal,TaxAmt))) ~> derivedColumnTotaldue",
+				"derivedColumnTotaldue sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
 				"          SalesOrderID as integer,",
@@ -262,7 +265,7 @@
 				"          SubTotal,",
 				"          TaxAmt,",
 				"          Freight,",
-				"          TotalDue",
+				"          TotalDue = TotalDuec",
 				"     )) ~> Synapsepoolfacttable",
 				"selectcustomercolumn sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
