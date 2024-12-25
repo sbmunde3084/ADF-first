@@ -8,26 +8,17 @@
 		"AzureDataLakeStorage1_accountKey": {
 			"value": ""
 		},
-		"AzureSqlDataasetLS_password": {
-			"value": ""
-		},
 		"AzureSynapseAnalytics2_connectionString": {
 			"value": ""
 		},
 		"Azuresqldb_Ls_connectionString": {
 			"value": ""
 		},
+		"linkedServicestage_connectionString": {
+			"value": ""
+		},
 		"AzureDataLakeStorage1_properties_typeProperties_url": {
 			"value": "https://my2ndadlsstorage16dec.dfs.core.windows.net/"
-		},
-		"AzureSqlDataasetLS_properties_typeProperties_server": {
-			"value": "sqldb17dec.database.windows.net"
-		},
-		"AzureSqlDataasetLS_properties_typeProperties_database": {
-			"value": "sqldb17dec"
-		},
-		"AzureSqlDataasetLS_properties_typeProperties_userName": {
-			"value": "sqldb17decadmin"
 		}
 	}
 }

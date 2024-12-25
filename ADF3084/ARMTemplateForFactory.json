@@ -11,10 +11,6 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'AzureDataLakeStorage1'"
 		},
-		"AzureSqlDataasetLS_password": {
-			"type": "secureString",
-			"metadata": "Secure string for 'password' of 'AzureSqlDataasetLS'"
-		},
 		"AzureSynapseAnalytics2_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'AzureSynapseAnalytics2'"
@@ -23,21 +19,13 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'Azuresqldb_Ls'"
 		},
+		"linkedServicestage_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'linkedServicestage'"
+		},
 		"AzureDataLakeStorage1_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://my2ndadlsstorage16dec.dfs.core.windows.net/"
-		},
-		"AzureSqlDataasetLS_properties_typeProperties_server": {
-			"type": "string",
-			"defaultValue": "sqldb17dec.database.windows.net"
-		},
-		"AzureSqlDataasetLS_properties_typeProperties_database": {
-			"type": "string",
-			"defaultValue": "sqldb17dec"
-		},
-		"AzureSqlDataasetLS_properties_typeProperties_userName": {
-			"type": "string",
-			"defaultValue": "sqldb17decadmin"
 		}
 	},
 	"variables": {
@@ -671,12 +659,17 @@
 								"datasetParameters": {
 									"Salesorderheader": {},
 									"Salesorderdetails": {},
-									"Synapsepoolfacttable": {}
+									"sourceCustomer": {},
+									"sourceProduct": {},
+									"sourceproductcategory": {},
+									"Synapsepoolfacttable": {},
+									"sinkdimCustomer": {},
+									"sinkdimproduct": {}
 								}
 							},
 							"staging": {
 								"linkedService": {
-									"referenceName": "AzureDataLakeStorage1",
+									"referenceName": "linkedServicestage",
 									"type": "LinkedServiceReference"
 								},
 								"folderPath": "synapse"
@@ -696,7 +689,160 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/dataflows/Dataflow_sql_to_pool')]",
-				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorage1')]"
+				"[concat(variables('factoryId'), '/linkedServices/linkedServicestage')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureProductcategory')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "Azuresqldb_Ls",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "ProductCategoryID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "ParentProductCategoryID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "Name",
+						"type": "nvarchar"
+					},
+					{
+						"name": "rowguid",
+						"type": "uniqueidentifier"
+					},
+					{
+						"name": "ModifiedDate",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					}
+				],
+				"typeProperties": {
+					"schema": "SalesLT",
+					"table": "ProductCategory"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/Azuresqldb_Ls')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureProductdataset')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "Azuresqldb_Ls",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "ProductID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "Name",
+						"type": "nvarchar"
+					},
+					{
+						"name": "ProductNumber",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Color",
+						"type": "nvarchar"
+					},
+					{
+						"name": "StandardCost",
+						"type": "money",
+						"precision": 19,
+						"scale": 4
+					},
+					{
+						"name": "ListPrice",
+						"type": "money",
+						"precision": 19,
+						"scale": 4
+					},
+					{
+						"name": "Size",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Weight",
+						"type": "decimal",
+						"precision": 8,
+						"scale": 2
+					},
+					{
+						"name": "ProductCategoryID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "ProductModelID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "SellStartDate",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "SellEndDate",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "DiscontinuedDate",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "ThumbNailPhoto",
+						"type": "varbinary"
+					},
+					{
+						"name": "ThumbnailPhotoFileName",
+						"type": "nvarchar"
+					},
+					{
+						"name": "rowguid",
+						"type": "uniqueidentifier"
+					},
+					{
+						"name": "ModifiedDate",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					}
+				],
+				"typeProperties": {
+					"schema": "SalesLT",
+					"table": "Product"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/Azuresqldb_Ls')]"
 			]
 		},
 		{
@@ -1137,6 +1283,81 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/AzureSynapsedimCustomer')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSynapseAnalytics2",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlDWTable",
+				"schema": [
+					{
+						"name": "CustomerID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "CompanyName",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "dimCustomer"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureSynapseAnalytics2')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureSynapsedimproduct')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSynapseAnalytics2",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlDWTable",
+				"schema": [
+					{
+						"name": "ProductID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "ProductNumber",
+						"type": "varchar"
+					},
+					{
+						"name": "Color",
+						"type": "varchar"
+					},
+					{
+						"name": "ProductCategoryID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "ProductCategoryName",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "dimProduct"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureSynapseAnalytics2')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/Input_csvds')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -1234,6 +1455,91 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/dimcustomer')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "Azuresqldb_Ls",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "CustomerID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "NameStyle",
+						"type": "bit"
+					},
+					{
+						"name": "Title",
+						"type": "nvarchar"
+					},
+					{
+						"name": "FirstName",
+						"type": "nvarchar"
+					},
+					{
+						"name": "MiddleName",
+						"type": "nvarchar"
+					},
+					{
+						"name": "LastName",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Suffix",
+						"type": "nvarchar"
+					},
+					{
+						"name": "CompanyName",
+						"type": "nvarchar"
+					},
+					{
+						"name": "SalesPerson",
+						"type": "nvarchar"
+					},
+					{
+						"name": "EmailAddress",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Phone",
+						"type": "nvarchar"
+					},
+					{
+						"name": "PasswordHash",
+						"type": "varchar"
+					},
+					{
+						"name": "PasswordSalt",
+						"type": "varchar"
+					},
+					{
+						"name": "rowguid",
+						"type": "uniqueidentifier"
+					},
+					{
+						"name": "ModifiedDate",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					}
+				],
+				"typeProperties": {
+					"schema": "SalesLT",
+					"table": "Customer"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/Azuresqldb_Ls')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/AzureDataLakeStorage1')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
@@ -1245,28 +1551,6 @@
 					"accountKey": {
 						"type": "SecureString",
 						"value": "[parameters('AzureDataLakeStorage1_accountKey')]"
-					}
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/AzureSqlDataasetLS')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureSqlDatabase",
-				"typeProperties": {
-					"server": "[parameters('AzureSqlDataasetLS_properties_typeProperties_server')]",
-					"database": "[parameters('AzureSqlDataasetLS_properties_typeProperties_database')]",
-					"encrypt": "optional",
-					"trustServerCertificate": false,
-					"authenticationType": "SQL",
-					"userName": "[parameters('AzureSqlDataasetLS_properties_typeProperties_userName')]",
-					"password": {
-						"type": "SecureString",
-						"value": "[parameters('AzureSqlDataasetLS_password')]"
 					}
 				}
 			},
@@ -1299,6 +1583,19 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/linkedServicestage')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"connectionString": "[parameters('linkedServicestage_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/Dataflow_sql_to_pool')]",
 			"type": "Microsoft.DataFactory/factories/dataflows",
 			"apiVersion": "2018-06-01",
@@ -1319,6 +1616,27 @@
 								"type": "DatasetReference"
 							},
 							"name": "Salesorderdetails"
+						},
+						{
+							"dataset": {
+								"referenceName": "dimcustomer",
+								"type": "DatasetReference"
+							},
+							"name": "sourceCustomer"
+						},
+						{
+							"dataset": {
+								"referenceName": "AzureProductdataset",
+								"type": "DatasetReference"
+							},
+							"name": "sourceProduct"
+						},
+						{
+							"dataset": {
+								"referenceName": "AzureProductcategory",
+								"type": "DatasetReference"
+							},
+							"name": "sourceproductcategory"
 						}
 					],
 					"sinks": [
@@ -1328,6 +1646,20 @@
 								"type": "DatasetReference"
 							},
 							"name": "Synapsepoolfacttable"
+						},
+						{
+							"dataset": {
+								"referenceName": "AzureSynapsedimCustomer",
+								"type": "DatasetReference"
+							},
+							"name": "sinkdimCustomer"
+						},
+						{
+							"dataset": {
+								"referenceName": "AzureSynapsedimproduct",
+								"type": "DatasetReference"
+							},
+							"name": "sinkdimproduct"
 						}
 					],
 					"transformations": [
@@ -1336,6 +1668,18 @@
 						},
 						{
 							"name": "selectcoloumn"
+						},
+						{
+							"name": "selectcustomercolumn"
+						},
+						{
+							"name": "joinproductandcategory"
+						},
+						{
+							"name": "selectDimproduct"
+						},
+						{
+							"name": "filtercolourNOTnullrows"
 						}
 					],
 					"scriptLines": [
@@ -1382,6 +1726,61 @@
 						"     validateSchema: false,",
 						"     isolationLevel: 'READ_UNCOMMITTED',",
 						"     format: 'table') ~> Salesorderdetails",
+						"source(output(",
+						"          CustomerID as integer,",
+						"          NameStyle as boolean,",
+						"          Title as string,",
+						"          FirstName as string,",
+						"          MiddleName as string,",
+						"          LastName as string,",
+						"          Suffix as string,",
+						"          CompanyName as string,",
+						"          SalesPerson as string,",
+						"          EmailAddress as string,",
+						"          Phone as string,",
+						"          PasswordHash as string,",
+						"          PasswordSalt as string,",
+						"          rowguid as string,",
+						"          ModifiedDate as timestamp",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     isolationLevel: 'READ_UNCOMMITTED',",
+						"     format: 'table') ~> sourceCustomer",
+						"source(output(",
+						"          ProductID as integer,",
+						"          Name as string,",
+						"          ProductNumber as string,",
+						"          Color as string,",
+						"          StandardCost as decimal(19,4),",
+						"          ListPrice as decimal(19,4),",
+						"          Size as string,",
+						"          Weight as decimal(8,2),",
+						"          ProductCategoryID as integer,",
+						"          ProductModelID as integer,",
+						"          SellStartDate as timestamp,",
+						"          SellEndDate as timestamp,",
+						"          DiscontinuedDate as timestamp,",
+						"          ThumbNailPhoto as binary,",
+						"          ThumbnailPhotoFileName as string,",
+						"          rowguid as string,",
+						"          ModifiedDate as timestamp",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     isolationLevel: 'READ_UNCOMMITTED',",
+						"     format: 'table') ~> sourceProduct",
+						"source(output(",
+						"          ProductCategoryID as integer,",
+						"          ParentProductCategoryID as integer,",
+						"          Name as string,",
+						"          rowguid as string,",
+						"          ModifiedDate as timestamp",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     isolationLevel: 'READ_UNCOMMITTED',",
+						"     format: 'table') ~> sourceproductcategory",
 						"Salesorderheader, Salesorderdetails join(Salesorderheader@SalesOrderID == Salesorderdetails@SalesOrderID,",
 						"     joinType:'inner',",
 						"     matchType:'exact',",
@@ -1404,6 +1803,27 @@
 						"     ),",
 						"     skipDuplicateMapInputs: true,",
 						"     skipDuplicateMapOutputs: true) ~> selectcoloumn",
+						"sourceCustomer select(mapColumn(",
+						"          CustomerID,",
+						"          CompanyName",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> selectcustomercolumn",
+						"sourceProduct, sourceproductcategory join(sourceProduct@ProductCategoryID == sourceproductcategory@ProductCategoryID,",
+						"     joinType:'inner',",
+						"     matchType:'exact',",
+						"     ignoreSpaces: false,",
+						"     broadcast: 'auto')~> joinproductandcategory",
+						"joinproductandcategory select(mapColumn(",
+						"          ProductID,",
+						"          ProductNumber,",
+						"          Color,",
+						"          ProductCategoryID = sourceProduct@ProductCategoryID,",
+						"          ProductCategoryName = sourceproductcategory@Name",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> selectDimproduct",
+						"selectDimproduct filter(!isNull(Color)) ~> filtercolourNOTnullrows",
 						"selectcoloumn sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
 						"     input(",
@@ -1425,18 +1845,81 @@
 						"     updateable:false,",
 						"     upsertable:false,",
 						"     format: 'table',",
+						"     staged: false,",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     errorHandlingOption: 'stopOnFirstError',",
+						"     mapColumn(",
+						"          SalesOrderID,",
+						"          OrderQty,",
+						"          ProductID,",
+						"          UnitPrice,",
+						"          UnitPriceDiscount,",
+						"          LineTotal,",
+						"          OrderDate,",
+						"          CustomerID,",
+						"          SubTotal,",
+						"          TaxAmt,",
+						"          Freight,",
+						"          TotalDue",
+						"     )) ~> Synapsepoolfacttable",
+						"selectcustomercolumn sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          CustomerID as integer,",
+						"          CompanyName as string",
+						"     ),",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     format: 'table',",
+						"     staged: false,",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     errorHandlingOption: 'stopOnFirstError',",
+						"     mapColumn(",
+						"          CustomerID,",
+						"          CompanyName",
+						"     )) ~> sinkdimCustomer",
+						"filtercolourNOTnullrows sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          ProductID as integer,",
+						"          ProductNumber as string,",
+						"          Color as string,",
+						"          ProductCategoryID as integer,",
+						"          ProductCategoryName as string",
+						"     ),",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     format: 'table',",
 						"     staged: true,",
 						"     allowCopyCommand: true,",
 						"     skipDuplicateMapInputs: true,",
 						"     skipDuplicateMapOutputs: true,",
-						"     errorHandlingOption: 'stopOnFirstError') ~> Synapsepoolfacttable"
+						"     errorHandlingOption: 'stopOnFirstError',",
+						"     mapColumn(",
+						"          ProductID,",
+						"          ProductNumber,",
+						"          Color,",
+						"          ProductCategoryID,",
+						"          ProductCategoryName",
+						"     )) ~> sinkdimproduct"
 					]
 				}
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/AzureSqlTableHeader')]",
 				"[concat(variables('factoryId'), '/datasets/AzureSqlTableDetails')]",
-				"[concat(variables('factoryId'), '/datasets/AzureSynapseAnalyticsTable2')]"
+				"[concat(variables('factoryId'), '/datasets/dimcustomer')]",
+				"[concat(variables('factoryId'), '/datasets/AzureProductdataset')]",
+				"[concat(variables('factoryId'), '/datasets/AzureProductcategory')]",
+				"[concat(variables('factoryId'), '/datasets/AzureSynapseAnalyticsTable2')]",
+				"[concat(variables('factoryId'), '/datasets/AzureSynapsedimCustomer')]",
+				"[concat(variables('factoryId'), '/datasets/AzureSynapsedimproduct')]"
 			]
 		}
 	]
