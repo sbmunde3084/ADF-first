@@ -44,7 +44,7 @@
 						"referenceName": "AzureSynapsedimCustomer",
 						"type": "DatasetReference"
 					},
-					"name": "MAXcustomersk"
+					"name": "MAXCustomerSK"
 				}
 			],
 			"sinks": [
@@ -68,6 +68,9 @@
 						"type": "DatasetReference"
 					},
 					"name": "sinkdimproduct"
+				},
+				{
+					"name": "sinkCacheMAXCustomerSK"
 				}
 			],
 			"transformations": [
@@ -200,16 +203,14 @@
 				"     isolationLevel: 'READ_UNCOMMITTED',",
 				"     format: 'table') ~> sourceproductcategory",
 				"source(output(",
-				"          CustomerSK as integer,",
-				"          CustomerID as integer,",
-				"          CompanyName as string",
+				"          MAXCustomerSk as integer",
 				"     ),",
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     isolationLevel: 'READ_UNCOMMITTED',",
-				"     query: 'SELECT MAX(CustomerSk) As \\'MAXCustomerSk\\'FROM dbo.dimCustomer;',",
+				"     query: 'SELECT MAX(CustomerSK) As MAXCustomerSk FROM dbo.dimCustomer',",
 				"     format: 'query',",
-				"     staged: true) ~> MAXcustomersk",
+				"     staged: true) ~> MAXCustomerSK",
 				"Salesorderheader, Salesorderdetails join(Salesorderheader@SalesOrderID == Salesorderdetails@SalesOrderID,",
 				"     joinType:'inner',",
 				"     matchType:'exact',",
@@ -346,7 +347,15 @@
 				"          ProductCategoryID,",
 				"          ProductCategoryName,",
 				"          ProductSK",
-				"     )) ~> sinkdimproduct"
+				"     )) ~> sinkdimproduct",
+				"MAXCustomerSK sink(validateSchema: false,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     keys:['MAXCustomerSk'],",
+				"     store: 'cache',",
+				"     format: 'inline',",
+				"     output: false,",
+				"     saveOrder: 1) ~> sinkCacheMAXCustomerSK"
 			]
 		}
 	}

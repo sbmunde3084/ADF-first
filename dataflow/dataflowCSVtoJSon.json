@@ -10,6 +10,9 @@
 						"type": "DatasetReference"
 					},
 					"name": "sourceCSV"
+				},
+				{
+					"name": "source1"
 				}
 			],
 			"sinks": [
@@ -39,6 +42,8 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> sourceCSV",
+				"source(allowSchemaDrift: true,",
+				"     validateSchema: false) ~> source1",
 				"sourceCSV sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     partitionFileNames:['ActivityLog'],",
