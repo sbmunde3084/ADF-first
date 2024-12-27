@@ -41,11 +41,13 @@
 				"     ignoreNoFilesFound: false) ~> sourceCSV",
 				"sourceCSV sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
+				"     partitionFileNames:['ActivityLog'],",
 				"     umask: 0022,",
 				"     preCommands: [],",
 				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> sinkJSON"
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> sinkJSON"
 			]
 		}
 	}
