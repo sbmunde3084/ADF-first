@@ -38,6 +38,13 @@
 						"type": "DatasetReference"
 					},
 					"name": "sourceproductcategory"
+				},
+				{
+					"dataset": {
+						"referenceName": "AzureSynapsedimCustomer",
+						"type": "DatasetReference"
+					},
+					"name": "MAXcustomersk"
 				}
 			],
 			"sinks": [
@@ -156,7 +163,7 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     isolationLevel: 'READ_UNCOMMITTED',",
-				"     query: 'SELECT * FROM SalesLT.Customer WHERE CustomerSK<20000',",
+				"     query: 'SELECT * FROM SalesLT.Customer WHERE CustomerID<20000',",
 				"     format: 'query') ~> sourceCustomer",
 				"source(output(",
 				"          ProductID as integer,",
@@ -192,6 +199,17 @@
 				"     validateSchema: false,",
 				"     isolationLevel: 'READ_UNCOMMITTED',",
 				"     format: 'table') ~> sourceproductcategory",
+				"source(output(",
+				"          CustomerSK as integer,",
+				"          CustomerID as integer,",
+				"          CompanyName as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     query: 'SELECT MAX(CustomerSk) As \\'MAXCustomerSk\\'FROM dbo.dimCustomer;',",
+				"     format: 'query',",
+				"     staged: true) ~> MAXcustomersk",
 				"Salesorderheader, Salesorderdetails join(Salesorderheader@SalesOrderID == Salesorderdetails@SalesOrderID,",
 				"     joinType:'inner',",
 				"     matchType:'exact',",
@@ -297,9 +315,9 @@
 				"     skipDuplicateMapOutputs: true,",
 				"     errorHandlingOption: 'stopOnFirstError',",
 				"     mapColumn(",
+				"          CustomerSK,",
 				"          CustomerID,",
-				"          CompanyName,",
-				"          CustomerSK",
+				"          CompanyName",
 				"     )) ~> sinkdimCustomer",
 				"surrogateKey1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
