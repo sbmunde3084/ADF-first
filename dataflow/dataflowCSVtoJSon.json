@@ -10,9 +10,6 @@
 						"type": "DatasetReference"
 					},
 					"name": "sourceCSV"
-				},
-				{
-					"name": "source1"
 				}
 			],
 			"sinks": [
@@ -42,10 +39,20 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> sourceCSV",
-				"source(allowSchemaDrift: true,",
-				"     validateSchema: false) ~> source1",
 				"sourceCSV sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
+				"     input(",
+				"          Correlationid as string,",
+				"          Operationname as string,",
+				"          Status as string,",
+				"          Eventcategory as string,",
+				"          Level as string,",
+				"          Subscription as string,",
+				"          Eventinitiatedby as string,",
+				"          Resourcetype as string,",
+				"          Resourcegroup as string,",
+				"          Resource as string",
+				"     ),",
 				"     partitionFileNames:['ActivityLog'],",
 				"     umask: 0022,",
 				"     preCommands: [],",
